@@ -1,0 +1,24 @@
+credentials:
+  usernames:
+    admin:
+      name: Team Member
+      password: "$2b$12$VE.xZ/VW3zYl7iLsjNeKDOw4tENSeJVCMeBbJS.ljbGZn3p0OGG0."
+      role: admin
+    ceo_user:
+      name: Cindy Sharp
+      password: "$2b$12$Q4X.fzrnGQnhK.CZv5FFfebcM.8B2X7TRoyBHYb5.kHONSdyv2ge."    
+      role: ceo
+    web_manager:
+      name: Morgan Rockwell
+      password: "$2b$12$v3Df8tKSioGhQYGBuORpwuEs.OEa/Efa5Tg2sOaa1wIoiUHwV9y3i"    
+      role: website_manager
+    marketing_mgr:
+      name: Tom Parmesan
+      password: "$2b$12$uqstmvJaDPIK6.eydXMwH.Q28Tw9jgSeOJpApyGOWnzrGlQADQRkK"    
+      role: marketing_manager
+
+cookie:
+  name: productanalytics_app
+  key: abcdef
+  expiry_days: 45
+
