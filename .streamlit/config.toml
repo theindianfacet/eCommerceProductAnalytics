@@ -1,7 +1,0 @@
-[theme]
-base="dark"
-primaryColor="#4CAF50"       # accent color (green here, you can change)
-backgroundColor="#0E1117"    # dark background
-secondaryBackgroundColor="#262730"
-textColor="#FAFAFA"
-font="sans serif"
