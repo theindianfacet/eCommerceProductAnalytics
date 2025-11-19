@@ -1,0 +1,24 @@
+# --- Python cache & bytecode ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --- Environment & secrets ---
+.env
+.streamlit/secrets.toml
+
+# --- OS-specific junk ---
+.DS_Store
+Thumbs.db
+
+# --- Jupyter notebooks checkpoints (if any) ---
+.ipynb_checkpoints/
+
+# --- Logs ---
+*.log
+
+# --- Virtual environments ---
+venv/
+env/
+.venv/
