@@ -6,6 +6,8 @@ import streamlit as st
 # -----------------------
 # CONFIG - values from st.secrets
 # -----------------------
+db = st.secrets["database"]
+
 SERVER = st.secrets["SERVER"]
 PORT = st.secrets["PORT"]
 DATABASE = st.secrets["DATABASE"]
