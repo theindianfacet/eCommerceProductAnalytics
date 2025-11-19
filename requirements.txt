@@ -7,4 +7,5 @@ numpy==1.26.4
 plotly==5.23.0
 PyYAML==6.0.2
 python-dotenv==1.0.1   
-cryptography==43.0.1 
+cryptography==43.0.1
+bcrypt
