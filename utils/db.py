@@ -86,24 +86,26 @@ def get_engine():
     """
 
     # --- Option 1: Streamlit Cloud (pymssql, no ODBC dependency) ---
-    #connection_url = f"mssql+pymssql://{USERNAME}:{PASSWORD}@{SERVER}:{PORT}/{DATABASE}"
-    #return create_engine(connection_url)
+    connection_url = f"mssql+pymssql://{USERNAME}:{PASSWORD}@{SERVER}:{PORT}/{DATABASE}"
+    return create_engine(connection_url)
 
     # --- Option 2: Render/Railway (pyodbc, requires ODBC Driver 17 installed) ---
-    if "," in SERVER or "\\" in SERVER:
-        server_fragment = SERVER
-    else:
-        server_fragment = f"{SERVER},{PORT}"
-    odbc_str = (
-        f"DRIVER={{ODBC Driver 17 for SQL Server}};"
-        f"SERVER={server_fragment};"
-        f"DATABASE={DATABASE};"
-        f"UID={USERNAME};PWD={PASSWORD};"
-        "Encrypt=no;"
-    )
-    quoted = urllib.parse.quote_plus(odbc_str)
-    connection_url = f"mssql+pyodbc:///?odbc_connect={quoted}"
-    return create_engine(connection_url, fast_executemany=True)
+# =============================================================================
+#     if "," in SERVER or "\\" in SERVER:
+#         server_fragment = SERVER
+#     else:
+#         server_fragment = f"{SERVER},{PORT}"
+#     odbc_str = (
+#         f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+#         f"SERVER={server_fragment};"
+#         f"DATABASE={DATABASE};"
+#         f"UID={USERNAME};PWD={PASSWORD};"
+#         "Encrypt=no;"
+#     )
+#     quoted = urllib.parse.quote_plus(odbc_str)
+#     connection_url = f"mssql+pyodbc:///?odbc_connect={quoted}"
+#     return create_engine(connection_url, fast_executemany=True)
+# =============================================================================
 
 
 def _apply_hints(df: pd.DataFrame, table_key: str) -> pd.DataFrame:
