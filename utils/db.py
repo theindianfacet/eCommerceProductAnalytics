@@ -8,12 +8,12 @@ import streamlit as st
 # -----------------------
 db = st.secrets["database"]
 
-SERVER = st.secrets["SERVER"]
-PORT = st.secrets["PORT"]
-DATABASE = st.secrets["DATABASE"]
-USERNAME = st.secrets["USERNAME"]
-PASSWORD = st.secrets["PASSWORD"]
-SCHEMA = st.secrets.get("SCHEMA", "dbo")   # default to dbo if not set
+SERVER = db["SERVER"]
+PORT = db["PORT"]
+DATABASE = db["DATABASE"]
+USERNAME = db["USERNAME"]
+PASSWORD = db["PASSWORD"]
+SCHEMA = db["SCHEMA"]   # default to dbo if not set
 
 TABLE_NAMES = {
     "products": "Products",
