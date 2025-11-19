@@ -6,14 +6,12 @@ import streamlit as st
 # -----------------------
 # CONFIG - values from st.secrets
 # -----------------------
-db = st.secrets["database"]
-
-SERVER = db["SERVER"]
-PORT = db["PORT"]
-DATABASE = db["DATABASE"]
-USERNAME = db["USERNAME"]
-PASSWORD = db["PASSWORD"]
-SCHEMA = db["SCHEMA"]   # default to dbo if not set
+SERVER = st.secrets["SERVER"]
+PORT = st.secrets["PORT"]
+DATABASE = st.secrets["DATABASE"]
+USERNAME = st.secrets["USERNAME"]
+PASSWORD = st.secrets["PASSWORD"]
+SCHEMA = st.secrets["SCHEMA"]
 
 TABLE_NAMES = {
     "products": "Products",
