@@ -86,7 +86,7 @@ def get_engine():
     """
 
     # --- Option 1: Streamlit Cloud (pymssql, no ODBC dependency) ---
-    connection_url = f"mssql+pymssql://{USERNAME}:{PASSWORD}@{SERVER}:{PORT}/{DATABASE}"
+    connection_url = f"mssql+pyodbc://{db['USERNAME']}:{db['PASSWORD']}@{db['SERVER']},{db['PORT']}/{db['DATABASE']}?driver=ODBC+Driver+17+for+SQL+Server"
     return create_engine(connection_url)
 
     # --- Option 2: Render/Railway (pyodbc, requires ODBC Driver 17 installed) ---
