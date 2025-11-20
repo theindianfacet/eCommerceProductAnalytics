@@ -1,32 +1,13 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-#import os
+import os
 from utils.db import load_tables
 from utils.filters import sidebar_filters
 from utils.agg import filter_sessions, filter_orders
 from utils.formatters import format_currency, format_percent, format_km
-#from utils.auth import enforce_access
-#from app import ROLE_DASHBOARDS
 
-# =============================================================================
-# # --- Role-based access enforcement ---
-# role = st.session_state.get("role", "guest")
-# allowed_pages = ROLE_DASHBOARDS.get(role, [])
-# enforce_access(role, allowed_pages, __file__)
-# =============================================================================
-
-#st.set_page_config(page_title="Channel Performance & Trends", layout="wide")
 st.title("📈 Channel Performance & Trends")   
-
-# =============================================================================
-# # --- Role-based access enforcement ---
-# role = st.session_state.get("role", "guest")
-# allowed_pages = ROLE_DASHBOARDS.get(role, [])
-# current_page = os.path.join("pages", os.path.basename(__file__))
-# enforce_access(role, allowed_pages, current_page)
-# =============================================================================
-
 
 F = sidebar_filters()
 dfs = load_tables(["website_sessions","orders"])

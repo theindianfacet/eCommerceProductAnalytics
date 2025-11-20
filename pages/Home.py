@@ -6,8 +6,6 @@ from utils.db import load_tables
 from utils.agg import compute_conversion_rate
 from utils.formatters import format_number, format_currency
 
-# Do NOT call st.set_page_config here
-
 # Role → allowed dashboards mapping
 ROLE_DASHBOARDS = {
     "admin": [
@@ -90,19 +88,9 @@ def render(authenticator=None, config=None):
 
     # Homepage content
     st.title("🧸 Analytics Hub")
-# =============================================================================
-#     st.markdown(
-#         """
-#         Welcome to your centralized analytics hub.  
-#         Gain clarity on acquisition, channel performance, conversion journeys, product paths, and customer insights — all in one place.
-#         """
-#     )
-#     st.markdown("---")
-# =============================================================================
 
     # Role-specific homepage KPIs
     if role == "admin":
-        #st.info("Admin: full access to all dashboards and KPIs.")
         k1, k2, k3 = st.columns(3)
         k1.metric("🖥️ Sessions", format_number(total_sessions))
         k2.metric("📦 Orders", format_number(total_orders))
@@ -113,20 +101,17 @@ def render(authenticator=None, config=None):
         k6.metric("🔄 Repeat Rate", f"{repeat_rate*100:.2f}%")
 
     elif role == "ceo":
-        #st.info("CEO: strategic KPIs overview.")
         k1, k2, k3 = st.columns(3)
         k1.metric("💵 Revenue", format_currency(total_revenue))
         k2.metric("✅ Conversion Rate", f"{conv_rate*100:.2f}%")
         k3.metric("📊 Average Order Value", f"${avg_order_value:,.2f}")
 
     elif role == "website_manager":
-        #st.info("Website Manager: operational metrics and funnel optimization.")
         k1, k2 = st.columns(2)
         k1.metric("🖥️ Sessions", format_number(total_sessions))
         k2.metric("✅ Conversion Rate", f"{conv_rate*100:.2f}%")
 
     elif role == "marketing_manager":
-        #st.info("Marketing Manager: campaign effectiveness and engagement.")
         k1, k2, k3 = st.columns(3)
         k1.metric("🖥️ Sessions", format_number(total_sessions))
         k2.metric("🔄 Repeat Rate", f"{repeat_rate*100:.2f}%")
@@ -137,8 +122,7 @@ def render(authenticator=None, config=None):
 
     st.markdown("---")
     
-    #st.subheader("📂 Dashboards")
-    # --- Role-aware navigation ---
+    # Role-aware navigation
     PAGES_MAP = {
         "pages/1_Traffic_and_Acquisition.py": st.Page(
             "pages/1_Traffic_and_Acquisition.py", title="Traffic & Acquisition", icon="🌐"

@@ -1,8 +1,8 @@
 import streamlit as st
 import plotly.express as px
 import pandas as pd
-#import numpy as np
-#import os
+import numpy as np
+import os
 from utils.db import load_tables
 from utils.filters import sidebar_filters
 from utils.agg import (
@@ -10,17 +10,7 @@ from utils.agg import (
     revenue_metrics, gsearch_metrics, rollup
 )
 from utils.formatters import format_currency, format_currency_precise, format_percent, format_number, format_km
-#from utils.auth import enforce_access
-#from app import ROLE_DASHBOARDS
 
-# =============================================================================
-# # --- Role-based access enforcement ---
-# role = st.session_state.get("role", "guest")
-# allowed_pages = ROLE_DASHBOARDS.get(role, [])
-# enforce_access(role, allowed_pages, __file__)
-# =============================================================================
-
-#st.set_page_config(page_title="Conversion Journey", layout="wide")
 st.title("🛤️ Conversion Journey")   
 
 
@@ -53,7 +43,7 @@ g2.metric("👥 Gsearch Sessions", format_number(gsearch['gsearch_sessions']))
 st.markdown("---") 
 
 
-# --- Gsearch volume trend ---
+# Gsearch volume trend
 st.markdown("### Gsearch Volume Trend")
 g_sess = sessions[sessions["utm_source"] == "gsearch"]
 g_roll = rollup(g_sess, "created_at", F["granularity"])
@@ -61,33 +51,11 @@ g_trend = g_roll.groupby("bucket").size().rename("sessions").reset_index()
 fig_g = px.line(g_trend, x="bucket", y="sessions")
 fig_g.update_layout(xaxis_title="Date", yaxis_title="Number of Sessions", showlegend=False)
 
-# =============================================================================
-# # Annotate crests & troughs
-# import numpy as np
-# y = g_trend["sessions"].values
-# x = g_trend["bucket"].values
-# count = 0
-# for i in range(1, len(y)-1):
-#     if y[i] > y[i-1] and y[i] > y[i+1]:  # crest
-#         count += 1
-#         if count % 3 == 0:
-#             fig_g.add_annotation(x=x[i], y=y[i], text=f"{y[i]:,}", showarrow=True,
-#                                  arrowhead=2, ay=-30, font=dict(color="green"))
-#     elif y[i] < y[i-1] and y[i] < y[i+1]:  # trough
-#         count += 1
-#         if count % 4 == 0:
-#             fig_g.add_annotation(x=x[i], y=y[i], text=f"{y[i]:,}", showarrow=True,
-#                                  arrowhead=2, ay=30, font=dict(color="red"))
-# 
-# =============================================================================
 st.plotly_chart(fig_g, use_container_width=True)
 
-st.markdown("---")  # Divider
+st.markdown("---")  
 
-# --- Funnel Analysis ---
-
-
-
+# Funnel Analysis
 st.subheader("G-Search Non-brand Funnel: /lander-1 → /thank-you-for-your-order")
 f_sess = g_sess[g_sess["utm_campaign"] == "nonbrand"]
 f_pv = pageviews[pageviews["website_session_id"].isin(f_sess["website_session_id"])]

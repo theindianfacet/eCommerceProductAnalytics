@@ -63,20 +63,6 @@ def sidebar_filters():
     # Page filters (optional)
     #purls = categorical_multiselect("Page URLs", PAGEVIEW_URLS, "pageview_urls", default_all=False)
     
-# =============================================================================
-#     return {
-#         "start_ts": start_ts,
-#         "end_ts": end_ts,
-#         "granularity": granularity,
-#         "utm_source": src,
-#         "utm_campaign": cmp,
-#         "utm_content": cnt,
-#         "device_type": dev,
-#         "http_referer": ref,
-#         "product_names": prod,
-#         "pageview_urls": purls,
-#     }
-# =============================================================================
     return {
         "start_ts": start_ts,
         "end_ts": end_ts,

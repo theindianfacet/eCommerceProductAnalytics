@@ -8,27 +8,20 @@ from utils.agg import filter_sessions, filter_orders
 from utils.formatters import format_percent
 
 
-# --- Page config and title ---
-#st.set_page_config(page_title="Product Journey Flows", layout="wide")
 st.title("📦 Product Journey Flows")
 
 
-# --- Filters and data load ---
-#F = sidebar_filters()
 dfs = load_tables(["website_pageviews", "orders"])
-#pageviews = filter_sessions(dfs["website_pageviews"], F)
-#orders = filter_orders(dfs["orders"], F)
 pageviews = dfs["website_pageviews"]
 orders = dfs["orders"]
 st.markdown("---")
 
-# --- Identify product pages and build session paths ---
 product_pages = pageviews[pageviews["pageview_url"].str.contains("/products")]
 paths = product_pages.groupby("website_session_id")["pageview_url"].apply(list).reset_index(name="product_path")
 paths_orders = paths.merge(orders[["order_id", "website_session_id", "price_usd"]], on="website_session_id", how="left")
 
 
-# --- Funnel groups definition ---
+# Funnel groups definition
 funnel_groups = {
     "Landers": ["/lander-1", "/lander-2", "/lander-3", "/lander-4", "/lander-5", "/home"],
     "Products": [
@@ -44,7 +37,7 @@ funnel_groups = {
     "Thank You": ["/thank-you-for-your-order"],
 }
 
-# --- Product-level funnels (exclude general /products listing) ---
+# --- Product-level funnels ---
 st.header("Product Conversion Funnels")
 funnels = []
 for prod in funnel_groups["Products"]:
@@ -83,7 +76,7 @@ for _, row in funnels_df.iterrows():
     )
     fig_prod_funnel.update_yaxes(title=None)
 
-    # K/M formatted labels (keeps concise numeric display)
+    # K/M formatted labels 
     def km_label(v):
         if v >= 1_000_000:
             return f"{v/1_000_000:.1f}M"
@@ -101,8 +94,6 @@ for _, row in funnels_df.iterrows():
     st.markdown("---")
 
 
-
-# --- KPI: Best converting product funnel (with icon) ---
 if not funnels_df.empty:
     funnels_df["conv_rate"] = funnels_df["Thank You"] / funnels_df["Cart"].replace(0, pd.NA)
     top_prod = funnels_df.sort_values("conv_rate", ascending=False).iloc[0]
@@ -112,7 +103,6 @@ else:
 
 st.markdown("---")
 
-# --- Build lookup dict and augment pageview rows for Sankey pathing ---
 st.header("Product wise Pathing Sankeys")
 
 url_to_group = {url: group for group, urls in funnel_groups.items() for url in urls}

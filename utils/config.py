@@ -1,11 +1,14 @@
+import streamlit as st
 # -----------------------
-# CONFIG - edit as needed
+# CONFIG - values from st.secrets
 # -----------------------
-SERVER = "DIVYANSH\\DIVYANSH_36"
-PORT = 1433
-DATABASE = "DigitAL"
-DRIVER = "ODBC Driver 17 for SQL Server"
-SCHEMA = "dbo"
+db = st.secrets["database"]
+SERVER = db["SERVER"]
+PORT = db["PORT"]
+DATABASE = db["DATABASE"]
+USERNAME = db["USERNAME"]
+PASSWORD = db["PASSWORD"]
+SCHEMA = db["SCHEMA"]
 
 TABLE_NAMES = {
     "products": "Products",

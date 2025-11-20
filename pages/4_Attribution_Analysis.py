@@ -1,22 +1,12 @@
 import streamlit as st
-#import pandas as pd
-#import os
+import pandas as pd
+import os
 import plotly.express as px
 from utils.db import load_tables
 from utils.filters import sidebar_filters
 from utils.agg import filter_sessions, filter_orders
 from utils.formatters import format_currency, format_km
-#from utils.auth import enforce_access
-#from app import ROLE_DASHBOARDS
 
-# =============================================================================
-# # --- Role-based access enforcement ---
-# role = st.session_state.get("role", "guest")
-# allowed_pages = ROLE_DASHBOARDS.get(role, [])
-# enforce_access(role, allowed_pages, __file__)
-# =============================================================================
-
-#st.set_page_config(page_title="Attribution Analysis", layout="wide")
 st.title("🧭 Attribution Analysis")  
 
 
@@ -50,7 +40,6 @@ lin_rev = linear_pairs.groupby("utm_source")["rev_share"].sum().reset_index(name
 
 attrib = ft_rev.merge(lt_rev, on="utm_source", how="outer").merge(lin_rev, on="utm_source", how="outer").fillna(0)
 
-# --- KPI: Top source by each model ---
 st.markdown("### Top Sources by Attribution Model")
 col1, col2, col3 = st.columns(3)
 if not attrib.empty:

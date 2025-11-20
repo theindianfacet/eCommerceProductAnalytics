@@ -1,7 +1,7 @@
 import streamlit as st
 import plotly.express as px
 import pandas as pd
-#import os
+import os
 from utils.db import load_tables
 from utils.filters import sidebar_filters
 from utils.agg import (
@@ -10,19 +10,7 @@ from utils.agg import (
     hour_weekday_session_volume
 )
 from utils.formatters import  format_percent, format_number, format_km
-#from utils.auth import enforce_access
-#from app import ROLE_DASHBOARDS
 
-# =============================================================================
-# # --- Role-based access enforcement ---
-# role = st.session_state.get("role", "guest")
-# allowed_pages = ROLE_DASHBOARDS.get(role, [])
-# enforce_access(role, allowed_pages, __file__)
-# =============================================================================
-
-
-# --- Page setup ---
-#st.set_page_config(page_title="Traffic & Acquisition", layout="wide")
 st.title("🌐 Traffic & Acquisition")  
 
 
@@ -176,7 +164,8 @@ c2.metric("Broad/Nonbrand Conversion Rate", f"{broad_conv:.1f}%")
 c3.metric("Revenue Gap (Direct vs Broad)", f"${rev_gap:,.0f}")
 
 st.markdown("---")  
-# --- Conversion rate bar chart ---
+
+# Conversion rate
 traffic_summary["conv_label"] = traffic_summary["conversion_rate"].apply(lambda x: f"{x:.1%}")
 fig_conv = px.bar(
     traffic_summary,
@@ -189,8 +178,9 @@ fig_conv.update_yaxes(tickformat=".0%")
 fig_conv.update_layout(yaxis_title="Conversion Rate", xaxis_title="Traffic Type")
 st.plotly_chart(fig_conv, use_container_width=True)
 
-st.markdown("---")  # Divider
-# --- Revenue bar chart ---
+st.markdown("---")
+
+# Revenue 
 traffic_summary["rev_label"] = traffic_summary["revenue"].apply(format_km)
 fig_rev = px.bar(
     traffic_summary,
@@ -202,101 +192,3 @@ fig_rev.update_traces(textposition="outside", texttemplate="%{text}")
 fig_rev.update_layout(yaxis_title="Revenue ($)", xaxis_title="Traffic Type")
 st.plotly_chart(fig_rev, use_container_width=True)
 
-# =============================================================================
-# # --- Keyword-Level Analysis & Granular Trends ---
-# st.subheader("Keyword-Level Analysis & Granular Trends")
-# 
-# # Aggregate by keyword
-# keyword_summary = sessions.groupby("utm_term").agg(
-#     sessions=("website_session_id","nunique")
-# ).reset_index()
-# 
-# orders_kw = orders.merge(sessions[["website_session_id","utm_term"]], on="website_session_id", how="left")
-# orders_summary = orders_kw.groupby("utm_term").agg(
-#     orders=("order_id","nunique"),
-#     revenue=("price_usd","sum")
-# ).reset_index()
-# 
-# keyword_summary = keyword_summary.merge(orders_summary, on="utm_term", how="left").fillna(0)
-# keyword_summary["conversion_rate"] = keyword_summary["orders"] / keyword_summary["sessions"]
-# 
-# # KPI cards
-# if not keyword_summary.empty:
-#     top_conv_kw = keyword_summary.sort_values("conversion_rate", ascending=False).iloc[0]
-#     top_rev_kw = keyword_summary.sort_values("revenue", ascending=False).iloc[0]
-#     c1, c2 = st.columns(2)
-#     c1.metric("Top Keyword by Conversion Rate", str(top_conv_kw["utm_term"]), f"{top_conv_kw['conversion_rate']*100:.1f}%")
-#     c2.metric("Top Keyword by Revenue", str(top_rev_kw["utm_term"]), f"${top_rev_kw['revenue']:,.0f}")
-# 
-# # Bar chart: conversion rate by keyword
-# fig_kw_conv = px.bar(
-#     keyword_summary.sort_values("conversion_rate", ascending=False).head(15),
-#     x="utm_term", y="conversion_rate",
-#     title="Top Keywords by Conversion Rate"
-# )
-# fig_kw_conv.update_yaxes(tickformat=".0%")
-# st.plotly_chart(fig_kw_conv, use_container_width=True)
-# 
-# # Line chart: sessions trend by campaign/keyword
-# sessions["month"] = pd.to_datetime(sessions["created_at"]).dt.to_period("M")
-# trend_kw = sessions.groupby(["utm_campaign","utm_term","month"]).size().reset_index(name="sessions")
-# 
-# fig_kw_trend = px.line(
-#     trend_kw,
-#     x="month", y="sessions", color="utm_campaign", line_group="utm_term",
-#     title="Sessions Trend by Campaign & Keyword"
-# )
-# st.plotly_chart(fig_kw_trend, use_container_width=True)
-# =============================================================================
-
-# =============================================================================
-# # --- Identifying Most Useful Channels/Campaigns/Keywords ---
-# st.subheader("Most Useful vs Wasteful Traffic Sources")
-# 
-# # Aggregate by source/campaign/keyword
-# traffic_perf = sessions.groupby(["utm_source","utm_campaign"]).agg(
-#     sessions=("website_session_id","nunique")
-# ).reset_index()
-# 
-# orders_perf = orders.merge(sessions[["website_session_id","utm_source","utm_campaign"]],
-#                            on="website_session_id", how="left")
-# orders_perf = orders_perf.groupby(["utm_source","utm_campaign"]).agg(
-#     orders=("order_id","nunique"),
-#     revenue=("price_usd","sum")
-# ).reset_index()
-# 
-# # Merge
-# traffic_perf = traffic_perf.merge(orders_perf, on=["utm_source","utm_campaign"], how="left").fillna(0)
-# traffic_perf["conversion_rate"] = traffic_perf["orders"] / traffic_perf["sessions"]
-# traffic_perf["revenue_per_session"] = traffic_perf["revenue"] / traffic_perf["sessions"]
-# 
-# # KPI cards
-# if not traffic_perf.empty:
-#     best = traffic_perf.sort_values("revenue_per_session", ascending=False).iloc[0]
-#     worst = traffic_perf.sort_values("revenue_per_session", ascending=True).iloc[0]
-#     c1, c2 = st.columns(2)
-#     c1.metric("Best Campaign/Keyword (RPS)", f"{best['utm_campaign']} | {best['utm_term']}", f"${best['revenue_per_session']:,.2f}")
-#     c2.metric("Worst Campaign/Keyword (RPS)", f"{worst['utm_campaign']} | {worst['utm_term']}", f"${worst['revenue_per_session']:,.2f}")
-# 
-# # Bar chart: top 10 by RPS
-# fig_rps = px.bar(
-#     traffic_perf.sort_values("revenue_per_session", ascending=False).head(10),
-#     x="utm_campaign", y="revenue_per_session", color="utm_source",
-#     hover_data=["utm_term","conversion_rate","sessions","orders"],
-#     title="Top 10 Campaigns/Keywords by Revenue per Session"
-# )
-# fig_rps.update_layout(yaxis_title="Revenue per Session (USD)")
-# st.plotly_chart(fig_rps, use_container_width=True)
-# 
-# # Scatter plot: conversion rate vs RPS
-# fig_scatter = px.scatter(
-#     traffic_perf,
-#     x="conversion_rate", y="revenue_per_session",
-#     size="sessions", color="utm_source",
-#     hover_data=["utm_campaign","utm_term","orders","revenue"],
-#     title="Conversion Rate vs Revenue per Session (Bubble = Sessions)"
-# )
-# fig_scatter.update_xaxes(title="Conversion Rate")
-# fig_scatter.update_yaxes(title="Revenue per Session (USD)")
-# st.plotly_chart(fig_scatter, use_container_width=True)
-# =============================================================================

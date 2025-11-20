@@ -34,7 +34,7 @@ def format_percent(p) -> str:
     if p is None or pd.isna(p):
         return "—"
     p = float(p)
-    if p > 1:  # safeguard: treat as already a percent
+    if p > 1:  
         return f"{p:.2f}%"
     return f"{p*100:.2f}%"
 
@@ -46,7 +46,7 @@ def format_km(value) -> str:
         return "0"
     if value >= 1_000_000:
         return f"{value/1_000_000:.1f}M"
-    elif value >= 10_000:   # intentional threshold
+    elif value >= 10_000:   
         return f"{value/1_000:.1f}K"
     else:
         return f"{value:,.0f}"

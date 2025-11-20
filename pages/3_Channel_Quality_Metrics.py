@@ -1,13 +1,11 @@
 import streamlit as st
 import pandas as pd
-#import os
+import os
 import plotly.express as px
 from utils.db import load_tables
 from utils.filters import sidebar_filters
 from utils.agg import filter_sessions, filter_orders
-#from utils.formatters import format_percent, format_currency
 
-#st.set_page_config(page_title="Channel Quality Metrics", layout="wide")
 st.title("🧪 Channel Quality Metrics")
 
 F = sidebar_filters()

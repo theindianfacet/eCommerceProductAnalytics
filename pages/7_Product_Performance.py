@@ -1,22 +1,12 @@
 import streamlit as st
 import plotly.express as px
 import pandas as pd
-#import os
+import os
 from utils.db import load_tables
 from utils.filters import sidebar_filters
 from utils.agg import filter_order_items, filter_orders, rollup
 from utils.formatters import format_currency, format_number, format_km
-#from utils.auth import enforce_access
-#from app import ROLE_DASHBOARDS
 
-# =============================================================================
-# # --- Role-based access enforcement ---
-# role = st.session_state.get("role", "guest")
-# allowed_pages = ROLE_DASHBOARDS.get(role, [])
-# enforce_access(role, allowed_pages, __file__)
-# =============================================================================
-
-#st.set_page_config(page_title="Product Performance", layout="wide")
 st.title("💰 Product Performance")
 
 
@@ -232,7 +222,7 @@ if "order_id" in items.columns and "product_name" in items.columns:
 
         st.markdown("---")
 
-        # --- Bar chart of top pairs ---
+        # Bar chart of top pairs
         st.subheader("Top 10 Cross-Sell Product Pairs")
         top10 = pair_counts.head(10).copy()
         top10["pair_label"] = top10.apply(lambda r: f"{r['product_a']} + {r['product_b']}", axis=1)
@@ -250,7 +240,7 @@ if "order_id" in items.columns and "product_name" in items.columns:
 
         st.markdown("---")
 
-        # --- Heatmap of product co-purchases ---
+        # Heatmap of product co-purchases
         st.subheader("Cross-Sell Heatmap")
         heatmap_data = pair_df.groupby(["product_a", "product_b"]).size().reset_index(name="count")
         heatmap_pivot = heatmap_data.pivot(index="product_a", columns="product_b", values="count").fillna(0)

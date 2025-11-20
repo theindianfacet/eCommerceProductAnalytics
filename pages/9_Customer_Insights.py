@@ -1,24 +1,14 @@
 import streamlit as st
-#import pandas as pd
+import pandas as pd
 import plotly.express as px
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
-#import os
+import os
 from utils.db import load_tables
 from utils.filters import sidebar_filters
 from utils.agg import filter_sessions, filter_orders, compute_conversion_rate
 from utils.formatters import format_number, format_currency, format_percent, format_km
-#from utils.auth import enforce_access
-#from app import ROLE_DASHBOARDS
 
-# =============================================================================
-# # --- Role-based access enforcement ---
-# role = st.session_state.get("role", "guest")
-# allowed_pages = ROLE_DASHBOARDS.get(role, [])
-# enforce_access(role, allowed_pages, __file__)
-# =============================================================================
-
-#st.set_page_config(page_title="Customer Insights", layout="wide")
 st.title("🧠 Customer Insights")
 
 

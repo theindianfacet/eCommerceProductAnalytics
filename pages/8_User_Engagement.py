@@ -1,23 +1,12 @@
 import streamlit as st
 import plotly.express as px
-#import pandas as pd
+import pandas as pd
 import plotly.graph_objects as go
-#import os
+import os
 from utils.db import load_tables
 from utils.filters import sidebar_filters
 from utils.agg import filter_sessions, filter_pageviews
 from utils.formatters import  format_percent, format_number, format_km
-#from utils.auth import enforce_access
-#from app import ROLE_DASHBOARDS
-
-# =============================================================================
-# # --- Role-based access enforcement ---
-# role = st.session_state.get("role", "guest")
-# allowed_pages = ROLE_DASHBOARDS.get(role, [])
-# enforce_access(role, allowed_pages, __file__)
-# =============================================================================
-
-#st.set_page_config(page_title="User Engagement", layout="wide")
 st.title("👥 User Engagement")
 
 F = sidebar_filters()
@@ -26,11 +15,9 @@ dfs = load_tables(["website_sessions", "website_pageviews"])
 sessions = filter_sessions(dfs["website_sessions"], F)
 pageviews = filter_pageviews(dfs["website_pageviews"], F)
 
-# --- KPI Cards ---
 total_views = len(pageviews)
 total_sessions = len(sessions)
 
-# Bounce rate
 pv_counts = pageviews.groupby("website_session_id").size().rename("pv_count").reset_index()
 sess_with_pv = sessions.merge(pv_counts, on="website_session_id", how="left").fillna({"pv_count": 0})
 bounce_rate = (sess_with_pv["pv_count"] == 1).sum() / len(sess_with_pv) if len(sess_with_pv) > 0 else None
@@ -66,7 +53,7 @@ st.plotly_chart(fig_entry, use_container_width=True)
 
 st.markdown("---")
 
-# --- Bounce rate deep dive ---
+# --- Bounce rate ---
 st.subheader("Bounce Rate by Entry Page")
 pv_counts = pageviews.groupby("website_session_id").size().rename("pv_count").reset_index()
 sess_with_pv = sessions.merge(pv_counts, on="website_session_id", how="left").fillna({"pv_count":0})

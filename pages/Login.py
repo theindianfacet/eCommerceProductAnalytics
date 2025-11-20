@@ -4,12 +4,7 @@ from yaml.loader import SafeLoader
 from utils.auth_state import ensure_session_keys, mark_activity, check_timeout
 
 def render(authenticator=None, config=None):
-    """
-    Render the Login page.
-    Parameters:
-    - authenticator: streamlit_authenticator.Authenticate instance (optional)
-    - config: loaded YAML config (optional)
-    """
+    # Render the Login page
     ensure_session_keys()
     check_timeout(threshold_minutes=3)
     mark_activity()
