@@ -69,19 +69,31 @@ st.markdown("---")
 
 st.markdown("### Average Session Volume")
 by_hour, by_weekday = hour_weekday_session_volume(sessions)
-c1, c2 = st.columns(2)
-with c1:
-    by_hour["label"] = by_hour["sessions"].apply(format_km)
-    fig_hr = px.bar(by_hour, x="hour", y="sessions", title="Average Session Volume by Hour of Day", text="label")
-    fig_hr.update_layout(xaxis_title="Hour", yaxis_title="Sessions")
-    fig_hr.update_traces(textposition="outside", texttemplate="%{text}")
-    st.plotly_chart(fig_hr, use_container_width=True)
-with c2:
-    by_weekday["label"] = by_weekday["sessions"].apply(format_km)
-    fig_wd = px.bar(by_weekday, x="weekday", y="sessions", title="Average Session Volume by Day of Week", text="label")
-    fig_wd.update_layout(xaxis_title="Day of Week", yaxis_title="Sessions")
-    fig_wd.update_traces(textposition="outside", texttemplate="%{text}")
-    st.plotly_chart(fig_wd, use_container_width=True)
+by_hour["label"] = by_hour["sessions"].apply(format_km)
+fig_hr = px.bar(
+    by_hour,
+    x="hour",
+    y="sessions",
+    title="Average Session Volume by Hour of Day",
+    text="label"
+)
+fig_hr.update_layout(xaxis_title="Hour", yaxis_title="Sessions")
+fig_hr.update_traces(textposition="outside", texttemplate="%{text}")
+st.plotly_chart(fig_hr, use_container_width=True)
+
+
+by_weekday["label"] = by_weekday["sessions"].apply(format_km)
+fig_wd = px.bar(
+    by_weekday,
+    x="weekday",
+    y="sessions",
+    title="Average Session Volume by Day of Week",
+    text="label"
+)
+fig_wd.update_layout(xaxis_title="Day of Week", yaxis_title="Sessions")
+fig_wd.update_traces(textposition="outside", texttemplate="%{text}")
+st.plotly_chart(fig_wd, use_container_width=True)
+
 
 st.markdown("---")  
 
